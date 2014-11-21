@@ -24,7 +24,7 @@ class AccessController < ApplicationController
       # create and save reset token on user
       user.reset_token = (0...16).map { (65 + rand(26)).chr }.join
       user.save
-      UserMailer.forgot_password_email(user).deliver
+      UserMailer.forgot_password_email(user, root_url).deliver
       flash[:success] = "Please check your email for reset instructions ..."
     end
     render :forgot_password
@@ -47,7 +47,7 @@ class AccessController < ApplicationController
     if @user.save
       session[:user_id] = @user.id
       flash[:success] = "You are now logged in!"
-      UserMailer.signup_confirmation(@user).deliver
+      UserMailer.signup_confirmation(@user, root_url).deliver
       redirect_to home_path
     else
       render :signup
